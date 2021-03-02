@@ -1,25 +1,24 @@
 const express = require('express');
-const providers = require('./providers.json');
+const morgan = require('morgan');
+
+const { randomFailuresMiddleware } = require('./middlewares');
+const logger = require('./logger');
+
 const app = express();
-const port = 3000;
+const port = process.env.SERVER_PORT || 3000;
 
-const FAILURE_PROBABILITY = 0.5;
+// Request logging
+app.use(
+    morgan(
+      ':method :url :status :res[content-length] - :response-time ms',
+      { stream: logger.stream, }
+    )
+  );
 
-function randomFailuresMiddleware(_, res, next) {
-    if (Math.random() > 1 - FAILURE_PROBABILITY) {
-        res.setHeader('Content-Type', 'text/plain');
-        res.writeHead(500, res.headers);
-        return res.end('#fail');
-    }
-    next();
-}
-
+// Middlewares
 app.use(randomFailuresMiddleware);
 
-app.get('/providers/:id', (req, res) => {
-    const bills = providers[req.params.id];
-    if (!bills) return res.status(404).end();
-    res.send(bills);
-});
+// Routes
+app.use(require('./routes'));
 
 app.listen(port, () => console.log(`Providers server listening at http://localhost:${port}`));
