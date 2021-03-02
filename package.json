@@ -5,7 +5,7 @@
   "main": "src/server.js",
   "scripts": {
     "start": "nodemon --use-strict",
-    "test": "mocha ..."
+    "test": "LOG_LEVEL=silent nyc --reporter=html --reporter=text mocha --recursive 'src/test/**/*.js' --exit"
   },
   "license": "ISC",
   "dependencies": {
@@ -14,6 +14,11 @@
     "winston": "^3.3.3"
   },
   "devDependencies": {
-    "nodemon": "^2.0.7"
+    "chai": "^4.3.1",
+    "chai-http": "^4.3.0",
+    "mocha": "^8.3.0",
+    "nodemon": "^2.0.7",
+    "nyc": "^15.1.0",
+    "sinon": "^9.2.4"
   }
 }

@@ -22,3 +22,5 @@ app.use(randomFailuresMiddleware);
 app.use(require('./routes'));
 
 app.listen(port, () => console.log(`Providers server listening at http://localhost:${port}`));
+
+module.exports = app;

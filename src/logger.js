@@ -7,7 +7,7 @@ const formatOpts = combine(timestamp(), json());
 
 const transports = [
   new winston.transports.Console({
-    level: 'info',
+    level: process.env.LOG_LEVEL || 'info',
     format: formatOpts,
   })
 ];
