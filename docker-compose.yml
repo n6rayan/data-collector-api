@@ -1,0 +1,16 @@
+version: '3.6'
+
+services:
+  mock-service: 
+    
+  queue:
+    container_name: aws-sqs
+    image: roribio16/alpine-sqs
+    ports:
+      - '9324:9324'
+      - '9325:9325'
+  provider-api:
+    build: ./
+    container_name: provider-api
+    links:
+      - queue

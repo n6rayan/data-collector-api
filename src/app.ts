@@ -1,8 +1,8 @@
 const express = require('express');
 const morgan = require('morgan');
 
-const { randomFailuresMiddleware } = require('./middlewares');
-const logger = require('./logger');
+const middleware = require('./middleware');
+const { stream } = require('./logger');
 
 const app = express();
 const port = process.env.SERVER_PORT || 3000;
@@ -11,12 +11,12 @@ const port = process.env.SERVER_PORT || 3000;
 app.use(
     morgan(
       ':method :url :status :res[content-length] - :response-time ms',
-      { stream: logger.stream, }
+      { stream, }
     )
   );
 
 // Middlewares
-app.use(randomFailuresMiddleware);
+app.use(middleware.authentication);
 
 // Routes
 app.use(require('./routes'));

@@ -1,5 +1,5 @@
 'use strict';
-const winston = require('winston');
+import winston from 'winston';
 
 const { combine, timestamp, json, } = winston.format;
 
@@ -12,14 +12,13 @@ const transports = [
   })
 ];
 
-const logger = winston.createLogger({
+export const logger = winston.createLogger({
   levels: winston.config.syslog.levels,
-  colorize: true,
   transports,
 });
 
-logger.stream = {
-  write: (message) => logger.info(message),
+export const stream = {
+  write: (message) => {
+    logger.info(message);
+  },
 };
-
-module.exports = logger;

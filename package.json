@@ -2,9 +2,11 @@
   "name": "datahog",
   "version": "1.0.0",
   "description": "Mock APIs",
-  "main": "src/server.js",
+  "main": "src/app.ts",
   "scripts": {
-    "start": "nodemon --use-strict",
+    "start": "ts-node src/app.ts",
+    "start:docker": "ts-node app.js",
+    "build": "tsc",
     "test": "LOG_LEVEL=silent nyc --reporter=html --reporter=text mocha --recursive 'src/test/**/*.js' --exit"
   },
   "license": "ISC",
@@ -19,6 +21,8 @@
     "mocha": "^8.3.0",
     "nodemon": "^2.0.7",
     "nyc": "^15.1.0",
-    "sinon": "^9.2.4"
+    "sinon": "^9.2.4",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.2.2"
   }
 }

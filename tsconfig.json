@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "outDir": "build",
+    "allowJs": true,
+    "checkJs": true,
+    "target": "ES6",
+    "resolveJsonModule": true,
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "esModuleInterop": true
+  },
+  "include": ["src"],
+  "exclude": ["src/test**"],
+  "ts-node": {
+    "transpileOnly": true,
+    "ignore": [
+      "/node_modules/",
+      "/src/test/"
+    ]
+  }
+}

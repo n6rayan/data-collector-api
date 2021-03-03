@@ -2,6 +2,6 @@ const router = require('express').Router();
 
 const controller = require('../controllers/providers');
 
-router.get('/:id', (req, res) => controller.getProvider(req, res));
+router.post('/', (req, res) => controller.postProvider(req, res));
 
 module.exports = router;

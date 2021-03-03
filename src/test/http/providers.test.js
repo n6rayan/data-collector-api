@@ -1,6 +1,6 @@
 const { server, chai, expect, sinon, } = require('../sandbox');
 
-const middlewares = require('../../middlewares');
+const middleware = require('../../middleware');
 
 describe('GET /providers', () => {
   let sandbox;
@@ -11,7 +11,7 @@ describe('GET /providers', () => {
   });
 
   beforeEach(() => {
-    middlewareStub = sinon.stub(middlewares, "randomFailuresMiddleware").callsFake((next) => next);
+    middlewareStub = sandbox.stub(middleware, "authentication").callsArg(3);
   });
 
   afterEach(() => {
