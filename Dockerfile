@@ -6,6 +6,7 @@ COPY build /app
 
 WORKDIR /app
 
-EXPOSE 3000
+ENV SERVER_PORT=3001
+EXPOSE 3001
 
 CMD npm run start:docker

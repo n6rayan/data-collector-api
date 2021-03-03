@@ -1,25 +1,14 @@
-const { server, chai, expect, sinon, } = require('../sandbox');
+const { app, chai, expect, sinon, } = require('../sandbox');
 
 const middleware = require('../../middleware');
 
 describe('GET /providers', () => {
-  let sandbox;
-  let middlewareStub;
-
-  before(() => {
-    sandbox = sinon.createSandbox()
-  });
-
-  beforeEach(() => {
-    middlewareStub = sandbox.stub(middleware, "authentication").callsArg(3);
-  });
-
-  afterEach(() => {
-    sandbox.restore()
-  });
+  before(() =>
+    sinon.stub(middleware, "authentication").callsFake((req, res, next) => next())
+  );
 
   it('should get the data for the gas provider', () => {
-    chai.request(server).get('/providers/gas').then((res) => {
+    chai.request(app).get('/providers/gas').then((res) => {
       const { status, body } = res;
       expect(status).to.equal(200);
       expect(body).to.be.an('Array');
@@ -31,7 +20,7 @@ describe('GET /providers', () => {
   });
 
   it('should get the data for the internet provider', () => {
-    chai.request(server).get('/providers/internet').then((res) => {
+    chai.request(app).get('/providers/internet').then((res) => {
       const { status, body } = res;
       expect(status).to.equal(200);
       expect(body).to.be.an('Array');

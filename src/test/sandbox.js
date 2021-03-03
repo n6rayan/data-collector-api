@@ -1,10 +1,10 @@
 const chai = require('chai');
 const sinon = require('sinon');
 
-const server = require('../server');
+const app = require('../app');
 
 chai.use(require('chai-http'));
 
 const expect = chai.expect;
 
-module.exports = { server, chai, expect, sinon, };
+module.exports = { app, chai, expect, sinon, };

@@ -1,16 +1,26 @@
 version: '3.6'
 
 services:
-  mock-service: 
-    
+  provider-api-mock-service:
+    build: ../datahog
+    container_name: provider-api
+    ports:
+      - '3000:3000'
+
   queue:
     container_name: aws-sqs
     image: roribio16/alpine-sqs
     ports:
       - '9324:9324'
       - '9325:9325'
-  provider-api:
+
+  data-collector-api:
     build: ./
-    container_name: provider-api
+    container_name: data-collector-api
+    ports:
+      - '3001:3001'
     links:
       - queue
+      - provider-api-mock-service
+    environment:
+      - SERVER_PORT=3001
