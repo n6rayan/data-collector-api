@@ -19,7 +19,7 @@ export const postProvider = (req, res) => {
       logger.error(e);
 
       return res.status(500).json({
-        error: `The provider '${provider}' is having a temporary outage.`
+        error: `The provider '${provider}' is having a temporary outage. Your request has been queued for a retry.`
       });
     });
 };

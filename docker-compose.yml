@@ -7,12 +7,15 @@ services:
     ports:
       - '3000:3000'
 
-  queue:
-    container_name: aws-sqs
-    image: roribio16/alpine-sqs
+  localstack:
+    container_name: localstack
+    image: localstack/localstack
     ports:
-      - '9324:9324'
-      - '9325:9325'
+      - '4566-4599:4566-4599'
+      - "${PORT_WEB_UI-8080}:${PORT_WEB_UI-8080}"
+    environment:
+      - SERVICES=lambda:4574,sqs:4576
+      - LAMBDA_EXECUTOR=docker-reuse
 
   data-collector-api:
     build: ./
@@ -20,7 +23,27 @@ services:
     ports:
       - '3001:3001'
     links:
-      - queue
+      - localstack
       - provider-api-mock-service
     environment:
       - SERVER_PORT=3001
+    depends_on:
+      - localstack
+      - provider-api-mock-service
+
+  setup-resources:
+    image: amazon/aws-cli
+    environment:
+      - AWS_ACCESS_KEY_ID=AKIAEXAMPLE123
+      - AWS_SECRET_ACCESS_KEY=AWSSECRETACCESSEY123
+      - AWS_DEFAULT_REGION=us-east-1
+    entrypoint: /bin/bash -c
+    depends_on:
+      - localstack
+    command:
+      [
+        'set -x',
+        'sleep 20',
+        'aws sqs create-queue --endpoint-url=http://localhost:4566 --queue-name retry-queue',
+        'aws lambda create-event-source-mapping --function-name arn:aws:lambda:us-east-1:000000000000:retryProvider --batch-size 1 --event-source-arn arn:aws:sqs:us-east-1:000000000000:retry-queue'
+      ]
