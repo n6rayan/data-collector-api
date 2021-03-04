@@ -1,11 +1,15 @@
-const express = require('express');
-const morgan = require('morgan');
+import express from 'express';
+import morgan from 'morgan';
+import bodyParser from 'body-parser';
 
 const middleware = require('./middleware');
-const { stream } = require('./logger');
+import { stream } from './logger';
+import routes from './routes';
 
 const app = express();
 const port = process.env.SERVER_PORT || 3001;
+
+app.use(bodyParser.json());
 
 // Request logging
 app.use(
@@ -19,8 +23,8 @@ app.use(
 app.use(middleware.authentication);
 
 // Routes
-app.use(require('./routes'));
+app.use(routes);
 
 app.listen(port, () => console.log(`Data Collector API server running at: http://localhost:${port}`));
 
-module.exports = app;
+export default app;
