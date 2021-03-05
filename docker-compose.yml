@@ -3,23 +3,25 @@ version: '3.6'
 services:
   provider-api-mock-service:
     build: ../datahog
-    container_name: provider-api
     ports:
       - '3000:3000'
 
   localstack:
-    container_name: localstack
     image: localstack/localstack
+    privileged: true
     ports:
       - '4566-4599:4566-4599'
-      - "${PORT_WEB_UI-8080}:${PORT_WEB_UI-8080}"
     environment:
-      - SERVICES=lambda:4574,sqs:4576
-      - LAMBDA_EXECUTOR=docker-reuse
+      - SERVICES=lambda,sqs,iam
+      - LAMBDA_EXECUTOR=docker
+      - LS_LOG=debug
+      - DEFAULT_REGION=eu-west-1
+      - DOCKER_HOST=unix:///var/run/docker.sock
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
 
   data-collector-api:
     build: ./
-    container_name: data-collector-api
     ports:
       - '3001:3001'
     links:
@@ -27,23 +29,7 @@ services:
       - provider-api-mock-service
     environment:
       - SERVER_PORT=3001
+    command: npm run create:resources
     depends_on:
       - localstack
       - provider-api-mock-service
-
-  setup-resources:
-    image: amazon/aws-cli
-    environment:
-      - AWS_ACCESS_KEY_ID=AKIAEXAMPLE123
-      - AWS_SECRET_ACCESS_KEY=AWSSECRETACCESSEY123
-      - AWS_DEFAULT_REGION=us-east-1
-    entrypoint: /bin/bash -c
-    depends_on:
-      - localstack
-    command:
-      [
-        'set -x',
-        'sleep 20',
-        'aws sqs create-queue --endpoint-url=http://localhost:4566 --queue-name retry-queue',
-        'aws lambda create-event-source-mapping --function-name arn:aws:lambda:us-east-1:000000000000:retryProvider --batch-size 1 --event-source-arn arn:aws:sqs:us-east-1:000000000000:retry-queue'
-      ]

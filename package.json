@@ -5,6 +5,7 @@
   "scripts": {
     "start": "ts-node-dev --respawn src/app.ts",
     "start:docker": "ts-node-dev --respawn app.js",
+    "create:resources": "./scripts/aws-resources.sh",
     "build": "tsc",
     "test": "LOG_LEVEL=silent nyc --reporter=html --reporter=text ts-mocha --recursive 'src/test/**/*.js' --exit"
   },

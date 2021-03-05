@@ -2,7 +2,7 @@ import express from 'express';
 import morgan from 'morgan';
 import bodyParser from 'body-parser';
 
-const middleware = require('./middleware');
+import { authentication } from './middleware';
 import { stream } from './logger';
 import routes from './routes';
 
@@ -20,7 +20,7 @@ app.use(
   );
 
 // Middlewares
-app.use(middleware.authentication);
+app.use(authentication);
 
 // Routes
 app.use(routes);
