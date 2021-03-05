@@ -29,7 +29,7 @@ services:
       - provider-api-mock-service
     environment:
       - SERVER_PORT=3001
-    command: npm run create:resources
+    command: npm run start:create
     depends_on:
       - localstack
       - provider-api-mock-service

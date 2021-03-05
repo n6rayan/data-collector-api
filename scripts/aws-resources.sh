@@ -8,7 +8,11 @@ export AWS_ACCESS_KEY_ID=AKIAEXAMPLE123
 export AWS_SECRET_ACCESS_KEY=AWSSECRETACCESSEY123
 export AWS_DEFAULT_REGION=eu-west-1
 
-zip lambda-retry-provider/function.zip index.js node_modules
+cd lambda-retry-provider/
+npm i
+zip function.zip index.js
+zip -ur function.zip node_modules/
+cd ..
 
 aws --endpoint-url http://localstack:4566 sqs create-queue --queue-name retry-queue --region eu-west-1
 
