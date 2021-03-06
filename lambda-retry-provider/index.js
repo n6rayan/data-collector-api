@@ -1,10 +1,10 @@
 const fetch = require('node-fetch');
 
+const dataCollectorApiUrl = 'http://data-collector-api:3001/providers';
+
 exports.handler = (event) => {
   const { Records } = event;
-  const [ message ] = Records;
-
-  const dataCollectorApiUrl = 'http://data-collector-api:3001/providers';
+  const [message] = Records;
 
   return fetch(dataCollectorApiUrl, {
     method: 'POST',

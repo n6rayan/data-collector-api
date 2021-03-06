@@ -27,7 +27,7 @@ const queueRetry = (body) => {
     MessageBody: JSON.stringify(body),
     QueueUrl: queueUrl
   }, (err, data) => {
-    logger.info(`Request queued for retry with provider '${body.provider}' and callback URL '${body.callbackUrl}'`);
+    logger.info('Request queued for retry.', body);
   
     if (err) logger.error(err);
     if (data) logger.info(data);
