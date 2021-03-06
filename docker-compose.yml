@@ -13,10 +13,11 @@ services:
       - '4566-4599:4566-4599'
     environment:
       - SERVICES=lambda,sqs,iam
-      - LAMBDA_EXECUTOR=docker
+      - LAMBDA_EXECUTOR=docker-reuse
       - LS_LOG=debug
       - DEFAULT_REGION=eu-west-1
       - DOCKER_HOST=unix:///var/run/docker.sock
+      - LAMBDA_DOCKER_NETWORK=wonderbill-tech-test_default
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
 

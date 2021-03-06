@@ -35,9 +35,12 @@ export const postProvider = (req, res) => {
         MessageBody: JSON.stringify(req.body),
         QueueUrl: aws.sqs.queueUrl
       }, (err, data) => {
-        if (err) console.log(err);
-        if (data) console.log(data);
+        logger.info(`Request queued for retry with provider '${req.body.provider}' and callback URL '${req.body.callbackUrl}'`);
+
+        if (err) logger.error(err);
+        if (data) logger.info(data);
       });
+
       logger.error(error);
 
       return res.status(500).json({

@@ -16,7 +16,8 @@
     "transpileOnly": true,
     "ignore": [
       "/node_modules/",
-      "/src/test/"
+      "/src/test/",
+      "/lambda-retry_provider/"
     ]
   }
 }
