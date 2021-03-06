@@ -1,18 +1,24 @@
-import AWS from 'aws-sdk';
+import schema from './schema';
 import fetch from '../helpers/fetch';
+import queueRetry from '../helpers/queueRetry';
 import config from '../config';
 import { logger } from '../logger';
 
-const { providerApi: { url }, aws } = config;
+const { providerApi: { url } } = config;
 
-const sqs = new AWS.SQS({
-  endpoint: aws.endpoint,
-  region: aws.region,
-  accessKeyId: aws.accessKeyId,
-  secretAccessKey: aws.secretAccessKey,
-});
+export const postProvider = async (req, res) => {
+  const { body } = req;
 
-export const postProvider = (req, res) => {
+  try {
+    const validationResult = await schema.validateAsync(body, { abortEarly: false });
+    logger.info(validationResult);
+  }
+  catch(err) {
+    logger.error(err);
+
+    return res.json({ errors: err.details });
+  }
+
   const { provider, callbackUrl } = req.body;
 
   return fetch(`${url}/providers/${provider}`)
@@ -31,15 +37,7 @@ export const postProvider = (req, res) => {
       return res.status(200).json(json);
     })
     .catch((error) => {
-      sqs.sendMessage({
-        MessageBody: JSON.stringify(req.body),
-        QueueUrl: aws.sqs.queueUrl
-      }, (err, data) => {
-        logger.info(`Request queued for retry with provider '${req.body.provider}' and callback URL '${req.body.callbackUrl}'`);
-
-        if (err) logger.error(err);
-        if (data) logger.info(data);
-      });
+      queueRetry(req.body);
 
       logger.error(error);
 
