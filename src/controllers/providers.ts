@@ -1,7 +1,7 @@
 import schema from './schema';
-import fetch from '../helpers/fetch';
-import queueRetry from '../helpers/queueRetry';
-import callbackRequest from '../helpers/callbackRequest';
+import { fetch } from '../helpers/fetch';
+import { queueRetry } from '../helpers/queueRetry';
+import { callbackRequest } from '../helpers/callbackRequest';
 import config from '../config';
 import { logger } from '../logger';
 
@@ -11,18 +11,17 @@ export const postProvider = async (request, response) => {
   const { body } = request;
 
   try {
-    const validationResult = await schema.validateAsync(body, { abortEarly: false });
-    logger.info(validationResult);
+    await schema.validateAsync(body, { abortEarly: false });
   }
   catch (err) {
     logger.error(err);
 
-    return response.json({ errors: err.details });
+    return response.status(400).json({ errors: err.details });
   }
 
   const { provider, callbackUrl, dataRetrieved, data } = request.body;
 
-  if (dataRetrieved) {
+  if (dataRetrieved && data) {
     return callbackRequest(callbackUrl, data)
       .then(({ status, data, message }) => {
         return response.status(status).json({ data, message });
@@ -34,7 +33,7 @@ export const postProvider = async (request, response) => {
     .then((json) => {
       logger.info('Response body received.', json);
 
-      callbackRequest(callbackUrl, json)
+      return callbackRequest(callbackUrl, json)
         .then(({ status, data, message }) => {
           return response.status(status).json({ data, message });
         });

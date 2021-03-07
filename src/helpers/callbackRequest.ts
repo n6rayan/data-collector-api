@@ -1,8 +1,8 @@
-import fetch from './fetch';
+import { fetch } from './fetch';
 import { logger } from '../logger';
-import queueRetry from './queueRetry';
+import { queueRetry } from './queueRetry';
 
-const callbackRequest = (url, data) => {
+export const callbackRequest = (url, data) => {
   return fetch(url, {
     method: 'POST',
     body: JSON.stringify(data),
@@ -26,7 +26,7 @@ const callbackRequest = (url, data) => {
       };
       queueRetry(retryData);
 
-      logger.error(error);
+      logger.error(error.message);
 
       return {
         status: 500,
@@ -35,4 +35,3 @@ const callbackRequest = (url, data) => {
       }
     })
 };
-export default callbackRequest;

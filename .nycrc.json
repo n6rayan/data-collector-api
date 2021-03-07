@@ -6,7 +6,7 @@
   "branches": 100,
   "exclude": [
     "**/test",
-    "**/logger.js",
-    "**/routes.js"
+    "**/src/logger.ts",
+    "**/routes.ts"
   ]
 }

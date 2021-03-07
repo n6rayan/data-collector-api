@@ -1,9 +1,11 @@
-import * as chai from 'chai';
-import sinon from 'sinon';
+const chai = require('chai');
+const sinon = require('sinon');
+const nock = require('nock');
 
 import app from '../app';
 
 chai.use(require('chai-http'));
+chai.use(require('sinon-chai'));
 const expect = chai.expect;
 
-export const { app, chai, expect, sinon, };
+module.exports = { app, chai, expect, nock, sinon, };

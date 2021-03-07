@@ -1,6 +1,6 @@
 const fetch = require('node-fetch');
 
-const dataCollectorApiUrl = 'http://data-collector-api:3001/providers';
+const dataCollectorApiUrl = 'http://data-collector-api:3001/api/providers';
 
 exports.handler = (event) => {
   const { Records } = event;

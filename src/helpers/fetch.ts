@@ -2,7 +2,7 @@ import nodeFetch from 'node-fetch';
 
 import { logger } from '../logger';
 
-const fetch = (url, options = {}) => {
+export const fetch = (url, options = {}) => {
   logger.info(`Making request to ${url}`, {
     ...options
   });
@@ -14,4 +14,3 @@ const fetch = (url, options = {}) => {
     return res;
   });
 };
-export default fetch;
