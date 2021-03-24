@@ -1,4 +1,4 @@
-# WonderBill Tech Test (Data Collector API)
+# Data Collector API
 
 ## Summary
 An Express/Node/TypeScript API that exposes a POST route. This route takes a JSON payload that specifies the `provider` of which to retrieve the data for and a `callbackUrl` to `POST` the data back to.
@@ -17,7 +17,7 @@ An Express/Node/TypeScript API that exposes a POST route. This route takes a JSO
 ```
 Applications
 └───Provider Data Mock Service (datahog)
-└───Data Collector API (wonderbill-tech-test)
+└───Data Collector API
 ```
 
 This will allow the `docker-compose.yml` to bundle the mock service into its own container in the overall application.
